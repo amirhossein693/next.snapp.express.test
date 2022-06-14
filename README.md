@@ -16,5 +16,5 @@ Yarn
 
 1. Clone project
 2. Go to project directory
-3. Run `yarn` command
+3. Run `yarn`
 4. Run `yarn next dev` 
