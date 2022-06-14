@@ -12,7 +12,7 @@ Node.js 12.22.0 or later<br />
 NextJs<br />
 Yarn
 
-## start and test
+## Start and Test
 
 1. Clone project
 2. Go to project directory
