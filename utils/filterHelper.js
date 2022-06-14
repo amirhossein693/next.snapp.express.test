@@ -1,15 +1,19 @@
 const filterHelper = ({
+  sort = 'product_price_asc',
   fetch_filters = 1,
   fetch_categories = 1,
-  menu_category_id = 390176,
+  menu_category_id = 0,
   vendorCode = "po9qzk",
   page = 0,
+  size = 18
 } = {}) => ({
+  sort,
   fetch_filters,
   fetch_categories,
   menu_category_id,
   vendorCode,
   page,
+  size,
   client: "PWA",
   optionalClient: "PWA",
   appVersion: "5.6.6",

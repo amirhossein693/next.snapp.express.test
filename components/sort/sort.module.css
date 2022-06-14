@@ -1,0 +1,47 @@
+.sortStyle {
+  display: block;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.sortBoxStyle span {
+  display: inline-block;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.sortButton {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 21px;
+}
+
+.sortButtonHide {
+  display: none;
+}
+
+.sortBoxStyle {
+  display: none;
+}
+
+.sortBoxStyleVisible {
+  display: inline-block;
+}
+
+.closeButton {
+  cursor: pointer;
+  vertical-align: -2px;
+}
+
+.activeSort{
+  color: #5ba4ee;
+}
+
+
+
+@media (min-width: 768px) {
+  .sortStyle {
+    display: flex;
+    align-items: center;
+  }
+}

@@ -9,7 +9,10 @@ const reducer = (state = {}, action) => {
       return {
         ...state,
         loading: false,
-        productVariations: simpleSerializer(action.payload.product_variations),
+        productVariations: simpleSerializer(action?.payload?.product_variations),
+        categories: simpleSerializer(action?.payload?.categories),
+        filters: action?.payload?.filters,
+        meta: action?.payload?.meta
       };
     default:
       return state;

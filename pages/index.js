@@ -1,5 +1,6 @@
 import { useReducer } from "react";
 import queryString from "query-string";
+import { useRouter } from 'next/router'
 import filterHelper from "../utils/filterHelper";
 import simpleSerializer from "../utils/simpleSerializer";
 import { API_PRODUCTS } from "../consts";
@@ -8,67 +9,60 @@ import {
   getProductsAction,
   getProductsSuccessAction,
 } from "../store/actionTypes";
-import { container, links, productsStyle, productStyle } from "./index.module.css";
+import {
+  pageContainer,
+  pageHeader,
+  pageTitle,
+} from "./index.module.css";
+import Products from "../components/products";
+import Categories from "../components/categories";
+import Sort from "../components/sort";
+import Pagination from "../components/pagination";
 
 const HomePage = ({ data }) => {
+  const router = useRouter();
+  const { cid } = router.query;
+
   const initialState = {
+    meta: data?.meta,
     loading: false,
     categories: simpleSerializer(data?.categories),
     productVariations: simpleSerializer(data?.product_variations),
+    filters:{}
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { meta, productVariations, categories, filters, loading } = state;
 
   const onGetProducts = (filtersObject) => {
-    const filters = filterHelper(filtersObject);
+    const filters = filterHelper({...filters, ...filtersObject});
     const stringifiedFilters = queryString.stringify(filters);
-    dispatch(getProductsAction());
+    dispatch(getProductsAction({filters}));
     fetch(`${API_PRODUCTS}?${stringifiedFilters}`)
       .then((res) => res.json())
       .then(({ data }) => {
-        dispatch(getProductsSuccessAction(data));
+        dispatch(getProductsSuccessAction({...data, filters}));
       });
   };
 
-  const { productVariations, categories, loading } = state;
   return (
-    <div className={container}>
-      <div className={links}>
-        {categories?.keys.map((item) => {
-          const category = categories?.values[item];
-          return (
-            <a
-              key={item}
-              onClick={() =>
-                onGetProducts(filterHelper({ menu_category_id: item }))
-              }
-            >
-              {category?.title}
-            </a>
-          );
-        })}
+    <div className={pageContainer}>
+      <div className={pageHeader}>
+        <h1 className={pageTitle}>سوپرمارکت</h1>
+        <Sort onGetProducts={onGetProducts} meta={meta} filters={filters} />
       </div>
-      <div className={productsStyle}>
-        {loading && <>loading...</>}
-        {!loading &&
-          productVariations?.keys.map((item) => {
-            const product = productVariations?.values?.[item];
-            return (
-              <div key={item} className={productStyle}>
-                <img width={200} height={200} src={product?.featured} />
-                {product?.title}
-              </div>
-            );
-          })}
-      </div>
+      <Categories onGetProducts={onGetProducts} categories={categories} filters={filters} />
+      <Products productVariations={productVariations} loading={loading} />
+      <Pagination onGetProducts={onGetProducts} meta={meta} filters={filters} loading={loading} />
     </div>
   );
 };
 
-export async function getServerSideProps() {
-  const filters = filterHelper();
+export async function getServerSideProps({ query, params }) {
+  const { page = 0 } = query;
+  const filters = filterHelper({page: page - 1});
   const stringifiedFilters = queryString.stringify(filters);
-  const res = await fetch(`${API_PRODUCTS}?${stringifiedFilters}`);
-  const { data, status } = await res.json();
+  const result = await fetch(`${API_PRODUCTS}?${stringifiedFilters}`);
+  const { data, status } = await result.json();
   const props = status ? { data } : {};
   return { props };
 }
