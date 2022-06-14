@@ -8,8 +8,8 @@ this project created with https://nextjs.org/
 
 ## Requirements
 
-Node.js 12.22.0 or later
-NextJs
+Node.js 12.22.0 or later<br />
+NextJs<br />
 Yarn
 
 ## start and test
