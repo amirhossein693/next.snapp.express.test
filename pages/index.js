@@ -19,16 +19,13 @@ import Categories from "../components/categories";
 import Sort from "../components/sort";
 import Pagination from "../components/pagination";
 
-const HomePage = ({ data }) => {
-  const router = useRouter();
-  const { cid } = router.query;
-
+const HomePage = ({ data, initialFilter }) => {
   const initialState = {
     meta: data?.meta,
     loading: false,
     categories: simpleSerializer(data?.categories),
     productVariations: simpleSerializer(data?.product_variations),
-    filters:{}
+    filters: initialFilter
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const { meta, productVariations, categories, filters, loading } = state;
@@ -63,7 +60,7 @@ export async function getServerSideProps({ query, params }) {
   const stringifiedFilters = queryString.stringify(filters);
   const result = await fetch(`${API_PRODUCTS}?${stringifiedFilters}`);
   const { data, status } = await result.json();
-  const props = status ? { data } : {};
+  const props = status ? { data, initialFilter: filters } : {};
   return { props };
 }
 

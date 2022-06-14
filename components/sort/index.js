@@ -33,7 +33,7 @@ const Sort = ({ onGetProducts, filters, meta }) => {
               key={index}
               onClick={() =>
                 onGetProducts(
-                  filterHelper({ menu_category_id: filters?.menu_category_id, sort: record?.name })
+                  filterHelper({ menu_category_id: filters?.menu_category_id, sort: record?.name, page: filters?.page ?? 0 })
                 )
               }
               className={c({ [activeSort]: record?.enabled })}

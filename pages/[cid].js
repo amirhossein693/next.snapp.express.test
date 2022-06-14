@@ -14,7 +14,7 @@ export async function getServerSideProps({ query, params }) {
   const stringifiedFilters = queryString.stringify(filters);
   const result = await fetch(`${API_PRODUCTS}?${stringifiedFilters}`);
   const { data, status } = await result.json();
-  const props = status ? { data } : {};
+  const props = status ? { data, initialFilter: filters } : {};
   return { props };
 }
 
